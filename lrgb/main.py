@@ -31,6 +31,9 @@ from graphgps.finetuning import load_pretrained_model_cfg, \
     init_model_from_pretrained
 from graphgps.logger import create_logger
 
+from graphgps.stage.drew_frond import DRewFrondModel
+
+from run_config import parser
 
 def new_optimizer_config(cfg):
     return OptimizerConfig(optimizer=cfg.optim.optimizer,
@@ -97,7 +100,8 @@ def run_loop_settings():
 
 if __name__ == '__main__':
     # Load cmd line args
-    args = parse_args()
+    args = parser.parse_args()
+    opt = vars(args)
     # Load config file
     set_cfg(cfg)
     cfg.run_dir = cfg.out_dir # prevents error when loading config.yaml file generated from run
@@ -125,7 +129,8 @@ if __name__ == '__main__':
         # Set machine learning pipeline
         loaders = create_loader()
         loggers = create_logger()
-        model = create_model()
+        #model = create_model()
+        model = DRewFrondModel(opt, dataset, device).to(device)
         if cfg.train.finetune:
             model = init_model_from_pretrained(model, cfg.train.finetune,
                                                cfg.train.freeze_pretrained)
