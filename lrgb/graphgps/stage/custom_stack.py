@@ -6,7 +6,7 @@ from torch_geometric.graphgym.models.gnn import GNNLayer
 from torch_geometric.graphgym.config import cfg
 import torch_geometric.graphgym.register as register
 import torch_geometric as pyg
-from .drew_gnn import get_laplacian
+from function_drew_gnn import get_laplacian
 
 class GNNStackStage(nn.Module):
     """
