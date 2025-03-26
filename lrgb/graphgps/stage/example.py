@@ -38,8 +38,9 @@ class GNNStackStage(nn.Module):
             batch.x = F.normalize(batch.x, p=2, dim=-1)
         return batch
 
+#register_stage('example', GNNStackStage) 
+register_stage('my_custom_stage', GNNStackStage)
 
-register_stage('example', GNNStackStage)
 
 from torch_geometric.graphgym import register
 

@@ -13,7 +13,7 @@ class DRewFrondModel(BaseGNN):
     def __init__(self, cfg, dataset, device=torch.device('cpu')):
         super(DRewFrondModel, self).__init__(cfg, dataset, device)
 
-        self.cfg = cfg.model ## [VERIFY]  # save cfg for use in forward()
+        self.cfg = cfg.model 
 
         # FROND settings
         self.f = set_function(cfg)
@@ -22,13 +22,16 @@ class DRewFrondModel(BaseGNN):
         self.odeblock = block(self.f, cfg, device, t=time_tensor).to(device)
 
         # DRew settings
-        self.alpha_t = nn.Parameter(torch.ones(cfg.layers_mp))  # Replaces opt['num_layers']
+        self.alpha_t = nn.Parameter(torch.ones(cfg.model.layers_mp))  # Replaces opt['num_layers']
         self.nu = getattr(cfg, 'nu', 1)
 
     def forward(self, batch):
         cfg = self.cfg  # convenience
 
         x = batch.x
+# ------------------ Added The error occurs because the node features (i.e. batch.x) are stored as a Long tensor instead of a floating-point tensor. Dropout (and most neural network operations) expects a floating-point type. To fix the error, convert the input tensor to float before applying dropout. ------------------        
+        x = x.float()
+# ------------------------------------------------------------------------------------------------------------
         batch_index = batch.batch  # graph assignment for each node
 
         # ------------------ FROND ODE Layers ------------------

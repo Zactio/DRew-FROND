@@ -8,7 +8,7 @@ import torch
 # from graphgps.example import GNNLayer #Added this as absolute import instead of the line above
 
 # from .utils import init_khop_GCN
-from stage_inits import init_DRewGCN
+from graphgps.stage.stage_inits import init_DRewGCN
 sort_and_removes_dupes = lambda mylist : sorted(list(dict.fromkeys(mylist)))
 from param_calcs import get_k_neighbourhoods
 
@@ -21,9 +21,22 @@ class DRewGNNStage(nn.Module):
         dim_out (int): Output dimension
         num_layers (int): Number of GNN layers
     """
+# attempt 3: Updated the DRewGNNStage init so it calls the initializer without reassigning self
+# ---------------------------------------------------------------------------------------------------------------------------------------
     def __init__(self, dim_in, dim_out, num_layers):
         super().__init__()
-        self = init_DRewGCN(self, dim_in, dim_out, num_layers)
+        # Initialize parameters using the provided numeric values from cfg
+        init_DRewGCN(self, dim_in, dim_out, num_layers)
+
+# ---------------------------------------------------------------------------------------------------------------------------------------
+
+# Attempt 2; 
+# ---------------------------------------------------------------------------------------------------------------------------------------
+
+    # def __init__(self, dim_in, dim_out, num_layers):
+    #     super().__init__()
+    #     self = init_DRewGCN(self, dim_in, dim_out, num_layers)
+# ---------------------------------------------------------------------------------------------------------------------------------------        
 
     def forward(self, batch):
         """

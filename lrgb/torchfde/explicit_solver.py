@@ -39,7 +39,7 @@ def Predictor(func,y0,beta,tspan,**options):
 
     for k in range(N):
         tn = tspan[k]
-        f_k = func(tn,yn, edge_weights)
+        f_k = func(tn,yn)
         fhistory.append(f_k)
 
         # can apply short memory here
