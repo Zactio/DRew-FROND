@@ -5,6 +5,8 @@ from torch_geometric.nn import global_mean_pool # added to aggregate the node re
 from base_classes import BaseGNN
 from model_configurations import set_block, set_function
 from torch_geometric.graphgym.register import register_network
+import torch_geometric
+from torch_geometric.data import Data
 
 
 # Updated codes from node classification to graph classification
@@ -27,10 +29,16 @@ class DRewFrondModel(BaseGNN):
 
     def forward(self, batch):
         cfg = self.cfg  # convenience
+        # print("BATCH INDEX ----------------------- and attr")
+        # print(batch.edge_index, batch.edge_attr)
 
         x = batch.x
+        # print("THIS IS ORIGINAL X VALUE::")
+        # print(x)
 # ------------------ Added The error occurs because the node features (i.e. batch.x) are stored as a Long tensor instead of a floating-point tensor. Dropout (and most neural network operations) expects a floating-point type. To fix the error, convert the input tensor to float before applying dropout. ------------------        
         x = x.float()
+        # print("THIS IS X VALUE::")
+        # print (x)
 # ------------------------------------------------------------------------------------------------------------
         batch_index = batch.batch  # graph assignment for each node
 
@@ -63,7 +71,13 @@ class DRewFrondModel(BaseGNN):
             z = z[:, cfg.hidden_dim:]
         else:
             self.odeblock.set_x0(x)
-            z = self.odeblock(x)
+            # print(type(x)) 
+            # print("THE TYPE IS ABOVE ---------------------")
+            # ATTEMPT 4
+            # batch_dummy = torch_geometric.data.Data(x=x, edge_index=batch.edge_index)
+            # z = self.odeblock(batch_dummy)
+            # OLD
+            z = self.odeblock(x, batch)
 
         z = F.relu(z)
 
@@ -86,8 +100,10 @@ class DRewFrondModel(BaseGNN):
         # Final decoding for graph classification
         out = self.m2(graph_emb)  # [num_graphs, num_classes]
 
-        print("success!!!!")
-        return out
+        # print("success!!!!")
+        # return out
+        return out, batch.y
+
 
 
 ##### Node classification code

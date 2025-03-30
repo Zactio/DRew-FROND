@@ -21,7 +21,8 @@ class ConstantODEblock_FRAC(ODEblock):
             self.model_cfg.hidden_dim,  # dim_out
             self.model_cfg.layers_mp    # num_layers
         )
-# change 4: using getattr (As no adjoint in YAML) #### [VERIFY] IF NEED ADJOINT in ODE
+# change 4: using getattr (As no adjoint in YAML) to provide a default value (False) if 'adjoint' is not in the config
+#### [VERIFY] IF NEED ADJOINT in ODE
 #---------------------------------------------------------------------------------------------------------------------------------------        
         if getattr(self.model_cfg, 'adjoint', False):
             from torchdiffeq import odeint_adjoint as odeint
@@ -39,7 +40,7 @@ class ConstantODEblock_FRAC(ODEblock):
         self.train_integrator = odeint
         self.test_integrator = odeint
 
-    def forward(self, x):
+    def forward(self, x, batch):
         t = self.t.type_as(x)
         integrator = self.train_integrator if self.training else self.test_integrator
         func = self.odefunc
@@ -51,10 +52,17 @@ class ConstantODEblock_FRAC(ODEblock):
             raise ValueError("alpha_ode must be in (0, 1)")
 
         # Use fractional ODE integration via fdeint
-        z = fdeint(func, state, alpha,
+        z = fdeint(func, state, alpha, # func here is function_drew_gnn
                    t=self.model_cfg.time,
                    step_size=self.model_cfg.step_size,
-                   method=self.model_cfg.method)
+                   method=self.model_cfg.method, batch=batch)
+
+        # z = fdeint(func=self.odefunc,
+        #    y0=state,
+        #    beta=alpha,
+        #    t=self.model_cfg.time,
+        #    step_size=self.model_cfg.step_size,
+        #    method=self.model_cfg.method)
 
         return z
 

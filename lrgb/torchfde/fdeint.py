@@ -22,7 +22,7 @@ SOLVERS = {"predictor":Predictor,
 
 }
 
-def fdeint(func,y0,beta,t,step_size,method,options=None):
+def fdeint(func,y0,beta,t,step_size,method,batch, options=None):
     """Integrate a system of ordinary differential equations.
 
       Solves the initial value problem for a non-stiff system of first order ODEs:
@@ -56,7 +56,7 @@ def fdeint(func,y0,beta,t,step_size,method,options=None):
     func, y0, tspan, method, beta= _check_inputs(func, y0, t,step_size,method,beta, SOLVERS)
     if options is None:
         options = {}
-    solution = SOLVERS[method](func=func, y0=y0, beta=beta, tspan=tspan,**options)
+    solution = SOLVERS[method](func=func, y0=y0, beta=beta, tspan=tspan, batch=batch,**options)
 
     return solution
 

@@ -2,6 +2,7 @@ agg_weights:
   convex_combo: false
   use: false
 
+k_max: 1000000
 benchmark: false
 bn:
   eps: 1.0e-05

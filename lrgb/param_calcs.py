@@ -21,6 +21,7 @@ def set_d_fixed_params(cfg):
 
 def get_k_neighbourhoods(t):
   sp_nbhs = list(range(1, min(t+1, cfg.k_max)+1))
+  
   return sort_and_removes_dupes(sp_nbhs)
 
 def get_num_fc_drew(L):

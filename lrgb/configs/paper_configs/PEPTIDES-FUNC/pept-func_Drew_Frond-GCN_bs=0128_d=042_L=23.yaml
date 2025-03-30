@@ -66,7 +66,7 @@ example_group:
 #   head: graph
 #   keep_edge: 0.5
 #   l2norm: true
-#   layer_type: drew_gcnconv
+  # layer_type: drew_gcnconv
 #   layers_mp: 23
 #   layers_post_mp: 1
 #   layers_pre_mp: 0
@@ -288,7 +288,7 @@ wandb:
 #Added 
 model:
   type: drew-frond
-  loss_fun: bce_with_logits  # Multilabel graph classification Originally cross_entrophy
+  loss_fun: cross_entropy  # Multilabel graph classification Originally cross_entrophy
   graph_pooling: mean
   edge_decoding: dot
   match_upper: true
@@ -311,7 +311,10 @@ model:
   block: constant_frac
   method: predictor
   step_size: 1.0
-  layers_mp: 23
+  layers_mp: 23 #23
+
+k_max: 100
+# layer_type: drew_gcnconv
 
   
 #   act: relu

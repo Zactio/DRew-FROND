@@ -16,7 +16,7 @@ def GNNLayer(dim_in, dim_out, has_act=True):
 
     """
     return GeneralLayer(
-        cfg.gnn.layer_type,
+        'drew_gcnconv',
         layer_config=new_layer_config(dim_in, dim_out, 1, has_act=has_act,
                                       has_bias=False, cfg=cfg))
 
@@ -34,8 +34,8 @@ class GNNStackStage(nn.Module):
     def forward(self, batch):
         for layer in self.children():
             batch = layer(batch)
-        if cfg.gnn.l2norm:
-            batch.x = F.normalize(batch.x, p=2, dim=-1)
+        # if cfg.model.l2norm:
+        batch.x = F.normalize(batch.x, p=2, dim=-1)
         return batch
 
 #register_stage('example', GNNStackStage) 

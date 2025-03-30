@@ -155,6 +155,7 @@ if __name__ == '__main__':
 
         # === Instantiate the model ===
         dataset = loaders[0].dataset
+        
         model = DRewFrondModel(cfg, dataset).to(cfg.device)
 
         # Fine-tune from checkpoint if applicable

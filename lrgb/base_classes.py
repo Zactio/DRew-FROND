@@ -66,7 +66,7 @@ class BaseGNN(MessagePassing):
         # Dataset information
         self.num_classes = dataset.num_classes
         self.num_features = dataset.data.num_features
-
+        
         # Time from cfg.model
         self.T = cfg.model.time
 

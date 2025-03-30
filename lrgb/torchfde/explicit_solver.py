@@ -5,7 +5,7 @@ def fractional_pow(base, exponent):
     eps = 1e-4
     return torch.pow(base, exponent)
 
-def Predictor(func,y0,beta,tspan,**options):
+def Predictor(func,y0,beta,tspan,batch,**options):
     """Use one-step Adams-Bashforth (Euler) method to integrate Caputo equation
         D^beta y(t) = f(t,y)
         Args:
@@ -39,7 +39,9 @@ def Predictor(func,y0,beta,tspan,**options):
 
     for k in range(N):
         tn = tspan[k]
-        f_k = func(tn,yn)
+        batch.x=yn
+        f_k = func(batch).detach()
+        # f_k = func(batch)
         fhistory.append(f_k)
 
         # can apply short memory here
