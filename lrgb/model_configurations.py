@@ -25,6 +25,7 @@ class FunctionNotDefined(Exception):
 
 def set_block(cfg):
     ode_str = cfg.model.block
+    # print(ode_str)
     if ode_str == 'constant_frac':
         block = ConstantODEblock_FRAC
     elif ode_str == 'att_frac':
