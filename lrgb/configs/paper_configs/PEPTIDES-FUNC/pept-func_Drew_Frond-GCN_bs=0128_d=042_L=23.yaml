@@ -53,6 +53,7 @@ edge_types: []
 example_arg: example
 example_group:
   example_arg: example
+#### GNNNNN
 # gnn:
 #   act: relu
 #   agg: mean
@@ -77,6 +78,30 @@ example_group:
 #   skip_every: 1
 #   stage_type: frond_gnn
 #   function_type: drew
+gnn:
+  act: relu
+  agg: add
+  att_final_linear: false
+  att_final_linear_bn: false
+  att_heads: 1
+  batchnorm: true
+  clear_feature: true
+  dim_inner: 42 # 16
+  dropout: 0.0
+  head: graph
+  keep_edge: 0.5
+  l2norm: true
+  layer_type: generalconv
+  layers_mp: 2 # 2
+  layers_post_mp: 1
+  layers_pre_mp: 0
+  msg_direction: single
+  normalize_adj: false
+  residual: false
+  self_msg: concat
+  skip_every: 1
+  stage_type: stack
+###########
 gpu_mem: false
 gt:
   attn_dropout: 0.0
@@ -119,11 +144,11 @@ name_tag: ''
 num_threads: 6
 num_workers: 0
 optim:
-  base_lr: 0.001
+  base_lr: 0.001 #0.001
   batch_accumulation: 1
   clip_grad_norm: false
   lr_decay: 0.1
-  max_epoch: 1000
+  max_epoch: 100 # 50 for testing
   min_lr: 1.0e-05
   momentum: 0.9
   num_warmup_epochs: 50
@@ -135,7 +160,7 @@ optim:
   - 30
   - 60
   - 90
-  weight_decay: 0.0
+  weight_decay: 0.0 #0.0
 out_dir: results
 posenc_ElstaticSE:
   dim_pe: 16
@@ -296,7 +321,7 @@ model:
   thresh: 0.5
 
   # Drew-Frond custom model hyperparams
-  hidden_dim: 256
+  hidden_dim: 256 #256
   dropout: 0.2
   input_dropout: 0.6
   use_mlp: true
@@ -306,7 +331,7 @@ model:
   function: DREW
   nu: 1
   l2norm: true
-  alpha_ode: 0.85
+  alpha_ode: 0.85 #0.85
   time: 40
   block: constant_frac
   method: predictor
@@ -314,222 +339,3 @@ model:
   layers_mp: 23 
 
 k_max: 100
-
-# layer_type: drew_gcnconv
-
-  
-#   act: relu
-#   agg: mean
-#   att_final_linear: false
-#   att_final_linear_bn: false
-#   att_heads: 1
-#   batchnorm: true
-#   clear_feature: true
-#   dim_inner: 42
-#   dropout: 0.0
-#   head: graph
-#   keep_edge: 0.5
-#   l2norm: true
-#   layer_type: drew_gcnconv
-#   layers_post_mp: 1
-#   layers_pre_mp: 0
-#   msg_direction: single
-#   normalize_adj: false
-#   residual: false
-#   self_msg: concat
-#   skip_every: 1
-#   stage_type: frond_gnn
-#   function_type: drew
-
-# -------------------------------------------------------------------------------------------
-
-## Only those used in drew-frond.py from config file are shown here.
-# hidden_dim: 256         # Example value, adjust as needed
-# dropout: 0.4
-# input_dropout: 0.6
-# use_mlp: true
-# use_labels: false
-# batch_norm: true
-# fc_out: true
-# function: DREW          # or graphcon, laplacian, etc.
-# nu: 1
-# l2norm: true
-# alpha_ode: 0.85
-# time: 40
-# block: constant_frac   # or constant_frac, etc.
-# method: ceuler
-# step_size: 1.0
-
-# # Only those used in drew-frond.py from config file are shown here (Drew-frond block).
-# drew-frond:
-#   hidden_dim: 256         # Example value, adjust as needed
-#   dropout: 0.4
-#   input_dropout: 0.6
-#   use_mlp: true
-#   use_labels: false
-#   batch_norm: true
-#   fc_out: true
-#   function: DREW          # or graphcon, laplacian, etc.
-#   nu: 1
-#   l2norm: true
-#   alpha_ode: 0.85
-#   time: 40
-#   block: constant_graph   # or constant_frac, etc.
-#   method: ceuler
-#   step_size: 1.0
-
-
-# # Adding Drew-Frond config file.
-# # VERIFY IF ALL THIS NEED TO BE ADDED
-# cuda: 1
-
-# # Dataset args
-# dataset: twitch-gamer
-# data_norm: gcn
-# self_loop_weight: 1.0
-# use_labels: false
-# geom_gcn_splits: true
-# num_splits: 1
-# label_rate: 0.5
-# planetoid_split: false
-# random_splits: false
-# edge_homo: 0.0
-
-# # GNN args
-# hidden_dim: 64
-# fc_out: false
-# input_dropout: 0.2
-# dropout: 0.4
-# batch_norm: false
-# optimizer: adam
-# lr: 0.01
-# decay: 0.0001
-# epoch: 100
-# alpha: 1.0
-# alpha_dim: sc
-# no_alpha_sigmoid: false
-# beta_dim: sc
-# block: constant_graph
-# function: DREW
-# use_mlp: false
-# add_source: false
-# cgnn: false
-# patience: 100
-
-# # ODE args
-# time: 3.0
-# augment: false
-# method: ceuler
-# step_size: 1.0
-# max_iters: 100
-# adjoint_method: adaptive_heun
-# adjoint: false
-# adjoint_step_size: 1.0
-# tol_scale: 1.0
-# tol_scale_adjoint: 1.0
-# ode_blocks: 1
-# max_nfe: 100000000000
-# no_early: false
-# earlystopxT: 3.0
-# max_test_steps: 100
-
-# # Attention args
-# leaky_relu_slope: 0.2
-# attention_dropout: 0.0
-# heads: 4
-# attention_norm_idx: 0
-# attention_dim: 64
-# mix_features: false
-# reweight_attention: false
-# attention_type: scaled_dot
-# square_plus: false
-
-# # Rewiring args
-# not_lcc: false
-
-# # Custom ODE parameters
-# alpha_ode: 0.5
-
-# # Runtime
-# runtime: 1
-# seed: 123
-
-
-
-
-# # [STRUCTURED UNDER DREW-FROND BLOCK] This is the new section for your drew-frond config.
-# drew-frond:
-#   use_cora_defaults: false
-#   cuda: 1
-
-#   # Dataset args
-#   dataset: twitch-gamer
-#   data_norm: gcn
-#   self_loop_weight: 1.0
-#   use_labels: false
-#   geom_gcn_splits: true
-#   num_splits: 1
-#   label_rate: 0.5
-#   planetoid_split: false
-#   random_splits: false
-#   edge_homo: 0.0
-
-#   # GNN args
-#   hidden_dim: 64
-#   fc_out: false
-#   input_dropout: 0.2
-#   dropout: 0.4
-#   batch_norm: false
-#   optimizer: adam
-#   lr: 0.01
-#   decay: 0.0001
-#   epoch: 100
-#   alpha: 1.0
-#   alpha_dim: sc
-#   no_alpha_sigmoid: false
-#   beta_dim: sc
-#   block: constant_graph
-#   function: DREW
-#   use_mlp: false
-#   add_source: false
-#   cgnn: false
-#   patience: 100
-
-#   # ODE args
-#   time: 3.0
-#   augment: false
-#   method: ceuler
-#   step_size: 1.0
-#   max_iters: 100
-#   adjoint_method: adaptive_heun
-#   adjoint: false
-#   adjoint_step_size: 1.0
-#   tol_scale: 1.0
-#   tol_scale_adjoint: 1.0
-#   ode_blocks: 1
-#   max_nfe: 100000000000
-#   no_early: false
-#   earlystopxT: 3.0
-#   max_test_steps: 100
-
-#   # Attention args
-#   leaky_relu_slope: 0.2
-#   attention_dropout: 0.0
-#   heads: 4
-#   attention_norm_idx: 0
-#   attention_dim: 64
-#   mix_features: false
-#   reweight_attention: false
-#   attention_type: scaled_dot
-#   square_plus: false
-
-#   # Rewiring args
-#   not_lcc: false
-
-#   # Custom ODE parameters
-#   alpha_ode: 0.5
-
-#   # Runtime
-#   runtime: 1
-#   seed: 123
-
